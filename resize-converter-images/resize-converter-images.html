@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Resize & Convert to WebP</title>
+	<link rel="icon" type="image/x-icon" href="/assets/icon.svg">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			padding: 20px;
+			max-width: 567px;
+			margin: auto;
+		}
+
+		h2 {
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		#drop-zone {
+			border: 2px dashed #aaa;
+			padding: 30px;
+			text-align: center;
+			color: #666;
+			margin-bottom: 20px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		#drop-zone.dragover {
+			background-color: #f0f0f0;
+			border-color: #333;
+		}
+
+		label {
+			display: block;
+			margin: 10px 0;
+		}
+
+		input[type="number"] {
+			width: 100%;
+			padding: 8px;
+			box-sizing: border-box;
+		}
+
+		button {
+			width: 100%;
+			padding: 10px;
+			background-color: #4caf50;
+			color: white;
+			border: none;
+			font-size: 16px;
+			cursor: pointer;
+			margin-top: 10px;
+		}
+
+		button:hover {
+			background-color: #45a049;
+		}
+
+		#progress-container {
+			margin-top: 10px;
+			display: none;
+		}
+
+		#progress-bar {
+			width: 0%;
+			height: 20px;
+			background-color: #4caf50;
+			transition: width 0.3s ease;
+		}
+
+		#status {
+			margin-top: 5px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		#preview {
+			max-width: 100%;
+			margin-top: 10px;
+			display: block;
+		}
+
+		@media (max-width: 600px) {
+			body {
+				padding: 10px;
+			}
+
+			button {
+				font-size: 14px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<h2>Resize dan Convert Gambar ke WebP</h2>
+
+	<div id="drop-zone">Drag & drop gambar di sini atau klik untuk upload</div>
+	<input type="file" id="upload" accept="image/png, image/jpeg, image/jpg" style="display:none;">
+
+
+	<label>Lebar (px): <input type="number" id="width" value="1366"></label>
+	<label>Tinggi (px): <input type="number" id="height" value="738"></label>
+	<label>Kualitas WebP (0.1 - 1): <input type="number" id="quality" value="0.3" step="0.1" min="0.1" max="1"></label>
+
+	<button onclick="convertImage()">Convert & Download</button>
+
+	<div id="progress-container">
+		<div id="progress-bar"></div>
+		<div id="status">Memproses...</div>
+	</div>
+
+	<img id="preview" alt="Preview Gambar">
+	<canvas id="canvas" style="display:none;"></canvas>
+
+	<script>
+		const dropZone = document.getElementById('drop-zone');
+		const fileInput = document.getElementById('upload');
+		const preview = document.getElementById('preview');
+		const progressContainer = document.getElementById('progress-container');
+		const progressBar = document.getElementById('progress-bar');
+		const statusText = document.getElementById('status');
+
+		dropZone.addEventListener('click', () => fileInput.click());
+
+		dropZone.addEventListener('dragover', (e) => {
+			e.preventDefault();
+			dropZone.classList.add('dragover');
+		});
+
+		dropZone.addEventListener('dragleave', () => {
+			dropZone.classList.remove('dragover');
+		});
+
+		dropZone.addEventListener('drop', (e) => {
+			e.preventDefault();
+			dropZone.classList.remove('dragover');
+			const file = e.dataTransfer.files[0];
+			handleFile(file);
+		});
+
+		fileInput.addEventListener('change', () => {
+			const file = fileInput.files[0];
+			handleFile(file);
+		});
+
+		let currentImage = null;
+
+		function handleFile(file) {
+			if (!file || !file.type.startsWith('image/')) {
+				alert("File bukan gambar.");
+				return;
+			}
+
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				const img = new Image();
+				img.onload = function () {
+					preview.src = img.src;
+					currentImage = img;
+				};
+				img.src = e.target.result;
+			};
+			reader.readAsDataURL(file);
+		}
+
+		function convertImage() {
+			const width = parseInt(document.getElementById('width').value);
+			const height = parseInt(document.getElementById('height').value);
+			const quality = parseFloat(document.getElementById('quality').value);
+			const canvas = document.getElementById('canvas');
+			const ctx = canvas.getContext('2d');
+
+			if (!currentImage) {
+				alert("Silakan upload gambar terlebih dahulu.");
+				return;
+			}
+
+			progressContainer.style.display = 'block';
+			progressBar.style.width = '30%';
+			statusText.textContent = 'Memproses...';
+
+			setTimeout(() => {
+				canvas.width = width;
+				canvas.height = height;
+				ctx.drawImage(currentImage, 0, 0, width, height);
+
+				progressBar.style.width = '60%';
+
+				canvas.toBlob(function (blob) {
+					progressBar.style.width = '100%';
+					statusText.textContent = 'Selesai!';
+
+					const link = document.createElement('a');
+					link.download = 'converted.webp';
+					link.href = URL.createObjectURL(blob);
+					link.click();
+
+					setTimeout(() => {
+						progressContainer.style.display = 'none';
+						progressBar.style.width = '0%';
+						statusText.textContent = '';
+					}, 2000);
+				}, 'image/webp', quality);
+			}, 500);
+		}
+
+	</script>
+</body>
+
+</html>

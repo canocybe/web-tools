@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="/assets/icon.svg">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator UUID dan Hash</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+      color: #333;
+    }
+    header {
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+      margin-top: 25px;
+      color: #444;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95em;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    button {
+      flex: 1;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .result-box {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+    .result-box span {
+      font-weight: bold;
+      color: #2c3e50;
+      word-break: break-word;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 0.9em;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #f1f1f1;
+    }
+    .status-collision {
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr; /* jadi satu kolom di tablet/HP */
+      }
+      header h1 {
+        font-size: 1.4em;
+      }
+      .container {
+        padding: 15px;
+      }
+      button {
+        font-size: 0.9em;
+        padding: 10px;
+      }
+      table {
+        font-size: 0.8em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.2em;
+      }
+      .button-group {
+        flex-direction: column; /* tombol ditumpuk */
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Generator UUID dan Hash</h1>
+    <p>Versi lengkap dengan hash/UUID, batch, dan ekspor</p>
+  </header>
+
+  <div class="container">
+    <!-- Bagian Single Generate -->
+    <h2>Generate ID Tunggal</h2>
+    <div class="form-grid">
+      <div>
+        <label>Judul Arsip</label>
+        <input type="text" id="judul" placeholder="Masukkan judul arsip" oninput="updatePreview()">
+        <small>Preview judul: <span id="preview"></span></small>
+      </div>
+      <div>
+        <label>Custom Panjang ID</label>
+        <input type="number" id="customLength" placeholder="Misalnya 20">
+      </div>
+      <div>
+        <label>Metode</label>
+        <select id="metode">
+          <option value="hash" selected>Hash</option>
+          <option value="uuid">UUID</option>
+        </select>
+      </div>
+      <div>
+        <label>Algoritma Hash</label>
+        <select id="algoritma">
+          <option value="auto" selected>Otomatis</option>
+          <option value="SHA-1">SHA-1</option>
+          <option value="SHA-256">SHA-256</option>
+          <option value="SHA-512">SHA-512</option>
+        </select>
+      </div>
+      <div>
+        <label>Panjang ID</label>
+        <select id="panjang">
+          <option value="8">8</option>
+          <option value="12">12</option>
+          <option value="24" selected>24</option>
+          <option value="32">32</option>
+          <option value="64">64</option>
+          <option value="128">128</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button onclick="buatId()">Generate</button>
+      <button onclick="copyId()">Copy</button>
+    </div>
+
+    <div class="result-box">
+      <p>ID Arsip: <span id="hasil"></span></p>
+      <p>Algoritma: <span id="algoPreview"></span></p>
+    </div>
+
+    <!-- Bagian Batch Generate -->
+    <h2>Batch Generate</h2>
+    <label>Masukkan banyak judul (satu per baris)</label>
+    <textarea id="batchInput"></textarea>
+    <div class="button-group">
+      <button onclick="buatBatch()">Generate Batch</button>
+      <button onclick="downloadBatch('csv')">Download CSV</button>
+      <button onclick="downloadBatch('txt')">Download TXT</button>
+    </div>
+    <div id="batchResult"></div>
+  </div>
+
+  <script>
+    async function hashString(str, panjang, algo) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str);
+      const hashBuffer = await crypto.subtle.digest(algo, data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+      return hashHex.substring(0, panjang);
+    }
+
+    function generateUUID() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+    }
+
+    async function generateId(judul, metode, panjang, algoChoice) {
+      let id, algoUsed;
+      if (metode === "hash") {
+        const cleanTitle = judul.trim().replace(/\s+/g, "-");
+        if (!cleanTitle) return {id:"", algo:""};
+        let algo = algoChoice;
+        if (algo === "auto") {
+          algo = (panjang > 64) ? "SHA-512" : "SHA-256";
+        }
+        id = await hashString(cleanTitle, panjang, algo);
+        algoUsed = algo;
+      } else {
+        const uuid = generateUUID().replace(/-/g, "");
+        let longUuid = uuid;
+        while (longUuid.length < panjang) longUuid += uuid;
+        id = longUuid.substring(0, panjang);
+        algoUsed = "UUID";
+      }
+      return {id, algo:algoUsed};
+    }
+
+    async function buatId() {
+      const judul = document.getElementById("judul").value;
+      if (!judul.trim()) { alert("Judul tidak boleh kosong!"); return; }
+      let panjang = parseInt(document.getElementById("panjang").value, 10);
+      const custom = parseInt(document.getElementById("customLength").value, 10);
+      if (custom > 0) panjang = custom;
+      if (panjang < 4 || panjang > 128) { alert("Panjang harus antara 4–128 karakter."); return; }
+      const metode = document.getElementById("metode").value;
+      const algoChoice = document.getElementById("algoritma").value;
+      const result = await generateId(judul, metode, panjang, algoChoice);
+      document.getElementById("hasil").textContent = result.id;
+      document.getElementById("algoPreview").textContent = result.algo;
+    }
+
+    async function copyId() {
+      const id = document.getElementById("hasil").textContent;
+      if (id) {
+        await navigator.clipboard.writeText(id);
+        alert("ID berhasil disalin: " + id);
+      } else {
+        alert("Belum ada ID yang dihasilkan!");
+      }
+    }
+
+    function updatePreview() {
+      const judul = document.getElementById("judul").value;
+      const cleanTitle = judul.trim().replace(/\s+/g, "-");
+      document.getElementById("preview").textContent = cleanTitle;
+    }
+
+    let batchData = [];
+
+    async function buatBatch() {
+      const lines = document.getElementById("batchInput").value.split("\n").filter(l => l.trim() !== "");
+      if (lines.length === 0) { alert("Masukkan minimal satu judul!"); return; }
+
+      let panjang = parseInt(document.getElementById("panjang").value, 10);
+      const custom = parseInt(document.getElementById("customLength").value, 10);
+      if (custom > 0) panjang = custom;
+
+      const metode = document.getElementById("metode").value;
+      const algoChoice = document.getElementById("algoritma").value;
+
+      let html = "<table><tr><th>Judul</th><th>ID</th><th>Algoritma</th><th>Status</th></tr>";
+      const seen = new Set();
+      batchData = [];
+
+      for (const judul of lines) {
+        const result = await generateId(judul, metode, panjang, algoChoice);
+        const collision = seen.has(result.id) ? "Collision" : "";
+        seen.add(result.id);
+
+        html += `<tr>
+                   <td>${judul}</td>
+                   <td>${result.id}</td>
+                   <td>${result.algo}</td>
+                   <td class="${collision ? 'status-collision' : ''}">${collision}</td>
+                 </tr>`;
+
+        batchData.push({judul, id:result.id, algo:result.algo, status:collision});
+      }
+
+      html += "</table>";
+      document.getElementById("batchResult").innerHTML = html;
+    }
+
+    function downloadBatch(format) {
+      if (batchData.length === 0) { alert("Belum ada data batch!"); return; }
+
+      let content = "";
+      let filename = "";
+
+      if (format === "csv") {
+        filename = "batch_id.csv";
+        content = "Judul,ID,Algoritma,Status\n";
+        batchData.forEach(row => {
+          content += `"${row.judul}","${row.id}","${row.algo}","${row.status}"\n`;
+        });
+      } else {
+        filename = "batch_id.txt";
+        content = "Judul\tID\tAlgoritma\tStatus\n";
+        batchData.forEach(row => {
+          content += `${row.judul}\t${row.id}\t${row.algo}\t${row.status}\n`;
+        });
+      }
+
+      const blob = new Blob([content], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- penting untuk responsif -->
+    <title>Web Tools</title>
+    <link rel="icon" type="image/x-icon" href="assets/icon.svg">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 30px;
+            color: #111;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        #searchBox {
+            display: block;
+            margin: 0 auto 30px auto;
+            padding: 12px;
+            width: calc(100% - 30px);
+            border: 1px solid #ccc;
+            outline: none;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        #linkList {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            /* default mobile */
+            gap: 20px;
+        }
+
+        /* Tablet */
+        @media (min-width: 600px) {
+            #linkList {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 900px) {
+            #linkList {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Large Desktop */
+        @media (min-width: 1200px) {
+            #linkList {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        #linkList li {
+            margin: 0;
+            padding: 0;
+        }
+
+        #linkList a {
+            display: block;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #000;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            min-height: 100px;
+        }
+
+        #linkList a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #linkList a .name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        #linkList a .preview {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            background: none;
+            border-bottom: 1px solid #000000;
+            /* garis bawah tipis abu-abu */
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="searchBox" placeholder="Cari berdasarkan nama...">
+    <ul id="linkList"></ul>
+
+    <script>
+        let allLinks = [];
+
+        // Ambil isi file link.txt
+        fetch('assets/link.txt')
+            .then(response => response.text())
+            .then(text => {
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+                allLinks = lines.map(line => {
+                    const parts = line.split('|');
+                    return {
+                        name: parts[0].trim(),   // Judul
+                        url: parts[1].trim(),    // Path halaman
+                        preview: parts[2] ? parts[2].trim() : "" // Preview kecil
+                    };
+                });
+                tampilkanLinks(allLinks, "");
+            });
+
+        // Fungsi untuk menampilkan link
+        function tampilkanLinks(links, keyword) {
+            const listElement = document.getElementById("linkList");
+            listElement.innerHTML = "";
+
+            links.forEach(link => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = link.url;
+                a.target = "_blank";
+
+                let nameText = link.name;
+                if (keyword) {
+                    const regex = new RegExp(`(${keyword})`, "gi");
+                    nameText = link.name.replace(regex, '<span class="highlight">$1</span>');
+                }
+
+                a.innerHTML = `
+          <div class="name">${nameText}</div>
+          <div class="preview">${link.preview}</div>
+        `;
+
+                li.appendChild(a);
+                listElement.appendChild(li);
+            });
+        }
+
+        // Event pencarian
+        document.getElementById("searchBox").addEventListener("input", function () {
+            const keyword = this.value.toLowerCase();
+            const filtered = allLinks.filter(link => link.name.toLowerCase().includes(keyword));
+            tampilkanLinks(filtered, keyword);
+        });
+    </script>
+</body>
+
+</html>

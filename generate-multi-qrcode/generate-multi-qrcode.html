@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="/assets/icon.svg">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi QR Code Generator (qrcode-generator)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    textarea {
+      width: calc(100% - 25px);
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+    }
+    select, button {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+    }
+    button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #429744;
+    }
+    #output {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    .qr-item {
+      text-align: center;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 220px;
+      flex: 1 1 220px;
+    }
+    .qr-item svg {
+      width: 200px;
+      height: 200px;
+    }
+    #slideContainer {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #slideContainer .qr-item {
+      display: none;
+      margin: 0 auto;
+    }
+    #slideContainer .qr-item.active {
+      display: block;
+    }
+    #slideControls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    /* Responsif */
+    @media (max-width: 1024px) {
+      .controls {
+        max-width: 90%;
+      }
+      .qr-item {
+        width: 180px;
+      }
+      .qr-item svg {
+        width: 160px;
+        height: 160px;
+      }
+    }
+    @media (max-width: 768px) {
+      textarea {
+        font-size: 13px;
+      }
+      button, select {
+        font-size: 13px;
+        padding: 10px;
+      }
+      .qr-item {
+        width: 150px;
+      }
+      .qr-item svg {
+        width: 130px;
+        height: 130px;
+      }
+    }
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      textarea {
+        font-size: 12px;
+      }
+      button, select {
+        font-size: 12px;
+        padding: 8px;
+      }
+      .qr-item {
+        width: 120px;
+      }
+      .qr-item svg {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Generate QR Code (Error Correction 7%)</h2>
+  <div class="controls">
+    <textarea id="inputText" rows="8" placeholder="Masukkan teks, satu per baris..."></textarea>
+    <label for="mode">Pilih Mode:</label>
+    <select id="mode">
+      <option value="default">Default</option>
+      <option value="slide">Slide</option>
+    </select>
+    <button id="generateBtn">Generate QR Codes</button>
+    <small>Tips: Tekan <b>Ctrl+Enter</b> untuk langsung generate.</small>
+  </div>
+
+  <div id="output"></div>
+  <div id="slideContainer"></div>
+  <div id="slideControls" style="display:none;">
+    <button id="prevBtn">← Sebelumnya</button>
+    <button id="nextBtn">Berikutnya →</button>
+  </div>
+
+  <!-- Library qrcode-generator -->
+  <script src="qrcode.min.js"></script>
+  <script>
+    let currentSlide = 0;
+    let slideItems = [];
+
+    function generateQRCodes() {
+      const mode = document.getElementById('mode').value;
+      const lines = document.getElementById('inputText').value.trim().split('\n').filter(l => l.trim() !== '');
+
+      const output = document.getElementById('output');
+      const slideContainer = document.getElementById('slideContainer');
+      const slideControls = document.getElementById('slideControls');
+
+      output.innerHTML = '';
+      slideContainer.innerHTML = '';
+      slideControls.style.display = 'none';
+
+      if (mode === 'default') {
+        lines.forEach((line, index) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'qr-item';
+
+          const label = document.createElement('p');
+          label.textContent = `Baris ${index + 1}: ${line}`;
+
+          const qr = qrcode(0, 'L');
+          qr.addData(line);
+          qr.make();
+          const qrDiv = document.createElement('div');
+          qrDiv.innerHTML = qr.createSvgTag({cellSize: 4, margin: 2});
+
+          wrapper.appendChild(label);
+          wrapper.appendChild(qrDiv);
+          output.appendChild(wrapper);
+        });
+      } else if (mode === 'slide') {
+        lines.forEach((line, index) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'qr-item';
+
+          const label = document.createElement('p');
+          label.textContent = `Baris ${index + 1}: ${line}`;
+
+          const qr = qrcode(0, 'L');
+          qr.addData(line);
+          qr.make();
+          const qrDiv = document.createElement('div');
+          qrDiv.innerHTML = qr.createSvgTag({cellSize: 4, margin: 2});
+
+          wrapper.appendChild(label);
+          wrapper.appendChild(qrDiv);
+          slideContainer.appendChild(wrapper);
+        });
+
+        slideItems = slideContainer.querySelectorAll('.qr-item');
+        currentSlide = 0;
+        showSlide(currentSlide);
+        slideControls.style.display = 'flex';
+      }
+    }
+
+    function showSlide(index) {
+      slideItems.forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+      });
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', generateQRCodes);
+
+    // Ctrl+Enter untuk generate
+    document.getElementById('inputText').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.ctrlKey) {
+        event.preventDefault();
+        generateQRCodes();
+      }
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', function() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        showSlide(currentSlide);
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', function() {
+      if (currentSlide < slideItems.length - 1) {
+        currentSlide++;
+        showSlide(currentSlide);
+      }
+    });
+  </script>
+</body>
+</html>
