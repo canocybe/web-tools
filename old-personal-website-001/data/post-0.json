@@ -1,0 +1,41 @@
+[{ "id": 999, "thumbnail": "/old-personal-website-001/assets/images/id-999-images-01.webp", "judul": "Judul artikel", "kategori": "Kategori artikel", "tanggal": "2025-01-25", "penulis": "Penulis artikel",
+   "konten": [
+      { "tipe": "gambar", "src": "/old-personal-website-001/assets/images/id-999-images-01.webp", "alt": "Nama dari gambar artikel" },
+      { "tipe": "subjudul", "isi": "Sub-Judul artikel" },
+      { "tipe": "paragraf", "isi": "Paragraf artikel" },
+      { "tipe": "list", "isi": [
+        "List artikel",
+        "List artikel",
+        { "item": "List artikel", "sub":[
+          "Sub-List 1 artikel",
+          "Sub-List 1 artikel",
+          { "item": "Sub-List 1 artikel", "sub":[
+            "Sub-List 2 artikel",
+            "Sub-List 2 artikel",
+            { "item": "Sub-List 2 artikel", "sub":[
+              "Sub-List 3 artikel",
+              "Sub-List 3 artikel"
+            ]}
+          ]}
+        ]},
+        "List artikel",
+        "List artikel"
+      ]},
+      { "tipe": "subjudul", "isi": "Sub-Judul artikel" },
+      { "tipe": "paragraf", "isi": "Paragraf artikel" },
+      { "tipe": "code", "isi": [
+        "== Contoh Source Code ==",
+        "include &lt;iostream&gt; include &lt;iostream&gt; include &lt;iostream&gt; include &lt;iostream&gt; include &lt;iostream&gt; include &lt;iostream&gt;",
+        "&nbsp;&nbsp;include &lt;iostream&gt;",
+        "include &lt;iostream&gt;"
+      ]},
+      { "tipe": "subjudul", "isi": "Sub-Judul artikel" },
+      { "tipe": "paragraf", "isi": "Paragraf artikel" },
+      { "tipe": "link", "src": "https://rizkioctaf.github.io", "target": "_blank", "isi": "<i>↪ Nama link artikel</i>" }
+    ]
+  },
+  {}
+]
+
+
+

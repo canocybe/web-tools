@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta name="theme-color" content="#FFFFFF">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Judul Blog -->
+  <title></title>
+  <!-- Link untuk Favicon Blog -->
+  <link rel="icon" type="image/x-icon" href="/assets/icon.svg">
+  <!-- Link Penghubung ke Main CSS -->
+  <link rel="stylesheet" href="/old-personal-website-001/assets/css/main-style.css" />
+</head>
+
+<body class="halaman-main">
+  <!-- Bagian Header -->
+  <header id="header" class="header">
+    <!-- Logo dan Nama Blog -->
+    <div id="header-logo" class="header-logo">
+      <a href="" id="header-logo-link" class="header-logo-link">
+        <img id="header-logo-link-img" src="" alt="logo">
+        <span id="header-logo-link-span"></span>
+      </a>
+    </div>
+    <!-- Menu Blog -->
+    <div id="header-menu" class="header-menu">
+      <ul class="link-header-menu" id="linkHeaderMenu">
+        <span id="close-btn" class="close-btn" onclick="closeNav()"></span>
+        <li><a id="link-header-menu-list-1" href=""></a></li>
+        <li><a id="link-header-menu-list-2" href=""></a></li>
+        <li onclick="toggleDropdown(this)">
+          <a id="link-header-menu-list-3"></a>
+          <div class="dropdown">
+            <a id="menu-list-anime-dropdown-1" href=""></a>
+            <a id="menu-list-anime-dropdown-2" href=""></a>
+            <a id="menu-list-anime-dropdown-3" href=""></a>
+            <a id="menu-list-anime-dropdown-4" href=""></a>
+            <a id="menu-list-anime-dropdown-5" href=""></a>
+          </div>
+        </li>
+        <li onclick="toggleDropdown(this)">
+          <a id="link-header-menu-list-4"></a>
+          <div class="dropdown">
+            <a id="menu-list-program-dropdown-1" href=""></a>
+            <a id="menu-list-program-dropdown-2" href=""></a>
+          </div>
+        </li>
+        <li><a id="link-header-menu-list-5" href=""></a></li>
+      </ul>
+      <div id="burger" class="burger" onclick="toggleNav()"></div>
+    </div>
+    <!-- Pencarian Blog -->
+    <div class="search-container" id="searchBox">
+      <span class="search-icon" onclick="expandSearch()"><img id="search-icon" src=""></span>
+      <input type="text" id="search" class="search-input" placeholder="" oninput="ArtikelApp.tampilkanJudul()" />
+      <span class="close-icon" id="search-close-icon" onclick="collapseSearch()"></span>
+    </div>
+  </header>
+
+  <!-- Bagian Main -->
+  <main id="main" class="main">
+    <!-- Highlight blog -->
+    <div id="main-highlight" class="main-highlight">
+      <div id="highlight-artikel" class="highlight-artikel"></div>
+    </div>
+
+    <!-- Semua Artikel Blog -->
+    <div id="main-content" class="main-content">
+      <div id="judul-container"></div>
+    </div>
+
+    <!-- Total Pencarian Blog -->
+    <div id="main-total-pencarian" class="main-total-pencarian hidden">
+      <p id="totalHasil"></p>
+    </div>
+
+    <!-- Pagination Blog -->
+    <div id="main-pagination" class="main-pagination hidden">
+      <button id="btn-prev" onclick="ubahHalaman(-1)"></button>
+      <span id="halamanAktif">1</span>
+      <button id="btn-next" onclick="ubahHalaman(1)"></button>
+    </div>
+  </main>
+
+  <!-- Bagian Footer -->
+  <footer id="footer" class="footer hidden">
+    <div class="footer-about">
+      <p id="footer-about-item"></p>
+    </div>
+
+    <!-- Copyright Blog -->
+    <div id="footer-copyright" class="footer-copyright">
+      <span id="copyright-item"></span>
+    </div>
+  </footer>
+
+  <!-- Link Penghubung ke Elemen Javascript -->
+  <script src="/old-personal-website-001/assets/js/elemen-script.js" defer></script>
+
+  <!-- Link Penghubung ke Main Javascript -->
+  <script src="/old-personal-website-001/assets/js/main-script.js" defer></script>
+</body>
+</html>

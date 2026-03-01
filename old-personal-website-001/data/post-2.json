@@ -1,0 +1,112 @@
+[
+  {
+    "id": 999,
+    "thumbnail": "/assets/images/id-999-images-01.webp",
+    "judul": "Judul dari Artikel",
+    "kategori": "kategori dari Artikel",
+    "tanggal": "Tanggal, 2025-01-25",
+    "penulis": "Nama Penulis",
+    "konten": [
+      {
+        "tipe": "gambar",
+        "src": "/assets/images/id-999-images-01.webp",
+        "alt": "Nama Gambar"
+      },
+      {
+        "tipe": "subjudul",
+        "isi": "Sub Judul Artikel"
+      },
+      {
+        "tipe": "subjudul",
+        "isi": ""
+      },
+      {
+        "tipe": "paragraf",
+        "isi": "Paragraf Artikel"
+      },
+      {
+        "tipe": "paragraf",
+        "isi": ""
+      },
+      {
+        "tipe": "paragraf",
+        "isi": ""
+      },
+      {
+        "tipe": "list",
+        "isi": [
+          "List Artikel",
+          "Anime ini menyentuh tema-tema yang jarang dieksplorasi secara eksplisit dalam medium anime",
+          "Anime ini menyentuh tema-tema yang jarang dieksplorasi secara eksplisit dalam medium anime",
+          "Anime ini menyentuh tema-tema yang jarang dieksplorasi secara eksplisit dalam medium anime",
+          "Anime ini menyentuh tema-tema yang jarang dieksplorasi secara eksplisit dalam medium anime",
+          "Anime ini menyentuh tema-tema yang jarang dieksplorasi secara eksplisit dalam medium anime",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      },
+      {
+        "tipe": "code",
+        "isi": [
+          "Contoh Source Code",
+          "include &lt;iostream&gt;include &lt;iostream&gt;include &lt;iostream&gt;include &lt;iostream&gt;include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "&nbsp;&nbsp;include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "include &lt;iostream&gt;include &lt;iostream&gt;",
+          "<iostream> ffffffffffffffffff",
+          "include &lt;iostream&gt;include &lt;iostream&gt;>>>"
+        ]
+      },
+      {
+        "tipe": "subjudul",
+        "isi": "Link Program atau Artikel"
+      },
+      {
+        "tipe": "link",
+        "src": "https://rizkioctaf.github.io",
+        "target": "_blank",
+        "isi": "Nama alamat link"
+      }
+    ]
+  }
+]
