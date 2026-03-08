@@ -28,7 +28,15 @@
       margin: 0 auto;
     }
 
-    textarea,
+    textarea {
+      width: calc(100% - 25px);
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+    }
+
     select,
     button {
       width: 100%;
@@ -131,7 +139,7 @@
   </div>
 
   <!-- Library JsBarcode -->
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <script src="JsBarcode.all.min.js"></script>
   <script>
     let currentSlide = 0;
     let slideItems = [];
